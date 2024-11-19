@@ -21,13 +21,20 @@ const App = () => {
     if (currentUser) {
       // Update user
       setUsers(
-        users.map((u) => (u.id === currentUser.id ? { ...user, id: currentUser.id } : u))
+        users.map((u) =>
+          u.id === currentUser.id ? { ...user, id: currentUser.id } : u
+        )
       );
     } else {
       // Add new user
       setUsers([...users, { ...user, id: Date.now() }]);
     }
     setIsEditing(false);
+  };
+  
+
+  const handleDelete = (id) => {
+    setUsers(users.filter((u) => u.id !== id));
   };
 
   return (
@@ -39,7 +46,7 @@ const App = () => {
           onSave={handleSave}
         />
       ) : (
-        <UserList users={users} onAdd={handleAdd} onEdit={handleEdit} />
+        <UserList users={users} onAdd={handleAdd} onEdit={handleEdit} onDelete={handleDelete} />
       )}
     </div>
   );

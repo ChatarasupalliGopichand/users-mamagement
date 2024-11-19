@@ -47,24 +47,25 @@ const UserForm = ({ user, onCancel, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Hello Sachin");
-    console.log("form data:", formData)
+  
     setLoading(true);
     try {
       if (user && user.id) {
-        await editUser(user.id, formData);
-        console.log("Hello Gopi");
+        await editUser(user.id, formData); // Pass `id` and `formData` correctly
+        onSave({ ...formData, id: user.id });
       } else {
-        await addUser(formData);
+        const response = await addUser(formData); // Ensure the API responds as expected
+        onSave(response.data || formData); // Use response data if provided
       }
-      onSave(formData); // Callback to parent component
     } catch (error) {
-      console.error("Error saving user:", error);
-      alert("Failed to save user. Please try again.");
+      console.error("Error saving user:", error.response || error.message);
+      alert(`Failed to save user. ${error.response?.data?.message || "Please try again."}`);
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <FormContainer>
